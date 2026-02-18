@@ -1,0 +1,30 @@
+\documentclass[a4paper, 12pt, french, notitlepage]{article}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{babel}
+ \usepackage[dvipsnames]{xcolor}
+
+\begin{document}
+ \begin{center}
+   \fontfamily{pbk}\selectfont\huge
+     Pratiques Devops
+ \end{center}
+ \hrule
+ \vspace{1cm}
+ \section*{Partie 1 – Introduction à DevOps (origine, principes, enjeux)}
+ \fontfamily{pbk}
+ \subsection*{1.}
+ \large
+ Le \textcolor{red}{Devops} est ensemble de pratiques qui met l'emphase sur l'automatisation des processus entre les équipes de développement et celle en charge du maintien en condition opérationnelle de l'application développée. Il chercher principalement les problèmes. Il vise principalement à supprimer le fossé historique entre les équipes de développement (Dev), axées sur l'innovation et la rapidité, et les équipes de production/exploitation (Ops), garantes de la stabilité et de la sécurité.
+ 
+\subsection*{2. Situation ou le Devops peut aider}
+ \large
+ \begin{itemize}
+    \item[-] Prenons le cas d'étudiants qui travaillent sur une application, pour tester l'application il doivent pousser leur travaux sur une branche Github pour les fusionner et faire une demo lors de la présentation, malheureusement le jour-j l'application marche chez l'un et pas chez l'autre a cause des versions d'outils différents. Le Devops ici va permettre grâce à Docker d'eviter les "ça marche sur mon PC" et automatise les tests avec GitHub Actions.
+    \vspace{0.2cm}
+    \item[-] La banque veut sortir une nouvelle fonctionnalité de "virement instantané". Les développeurs finissent le code en 2 semaines, mais l'équipe "Ops" (production) met 1 mois à préparer les serveurs car ils n'étaient pas au courant des besoins techniques. Lors du lancement, l'app plante sous le poids des utilisateurs, et il faut 3 jours pour revenir à l'ancienne version. Le Devops ici Réduit le délai de mise en production et sécurise les mises à jour via des déploiements automatisés (CI/CD)
+\end{itemize}
+\subsection*{3. Réponses aux questions}
+ 
+ 
+\end{document}
