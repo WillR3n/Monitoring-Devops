@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.2.17)  18 FEB 2026 15:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.2.17)  22 FEB 2026 14:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -138,21 +138,21 @@ Package babel Info: 'french' activates 'french' shorthands.
 )
 \openout1 = `Latex.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Info: Redefining \degres on input line 7.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Info: Redefining \degres on input line 8.
 
 (C:\Users\WillR3n\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.
 mkii
@@ -169,65 +169,89 @@ mkii
 \makeMPintoPDFobject=\count298
 \everyMPtoPDFconversion=\toks21
 )
-LaTeX Font Info:    Trying to load font information for T1+pbk on input line 9.
-
+LaTeX Font Info:    Trying to load font information for T1+pbk on input line 10
+.
  (C:\Users\WillR3n\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pbk.fd
 File: t1pbk.fd 2001/06/04 font definitions for T1/pbk.
 )
 LaTeX Font Info:    Font shape `T1/pbk/m/n' in size <12> not available
-(Font)              Font shape `T1/pbk/l/n' tried instead on input line 9.
+(Font)              Font shape `T1/pbk/l/n' tried instead on input line 10.
 LaTeX Font Info:    Font shape `T1/pbk/m/n' in size <24.88> not available
-(Font)              Font shape `T1/pbk/l/n' tried instead on input line 9.
+(Font)              Font shape `T1/pbk/l/n' tried instead on input line 10.
 LaTeX Font Info:    Font shape `T1/pbk/m/n' in size <14.4> not available
-(Font)              Font shape `T1/pbk/l/n' tried instead on input line 17.
+(Font)              Font shape `T1/pbk/l/n' tried instead on input line 19.
 
-Overfull \hbox (18.13542pt too wide) in paragraph at lines 18--19
+Overfull \hbox (18.13542pt too wide) in paragraph at lines 20--21
 \T1/pbk/l/n/14.4 phase sur l'au-to-ma-ti-sa-tion des pro-ces-sus entre les équi
 pes
  []
 
 
-Overfull \hbox (7.31769pt too wide) in paragraph at lines 23--25
+Overfull \hbox (7.31769pt too wide) in paragraph at lines 25--27
 \T1/pbk/l/n/14.4 ap-pli-ca-tion, pour tes-ter l'ap-pli-ca-tion il doivent pous-
 
  []
 
 
-Overfull \hbox (11.6371pt too wide) in paragraph at lines 23--25
+Overfull \hbox (11.6371pt too wide) in paragraph at lines 25--27
 \T1/pbk/l/n/14.4 mal-heu-reu-se-ment le jour-j l'ap-pli-ca-tion marche chez
  []
 
 
-Overfull \hbox (8.5124pt too wide) in paragraph at lines 25--26
+Overfull \hbox (8.5124pt too wide) in paragraph at lines 27--28
 \T1/pbk/l/n/14.4 de "vi-re-ment ins-tan-tané". Les dé-ve-lop-peurs fi-nissent
  []
 
 [1
 
 {C:/Users/WillR3n/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Wi
-llR3n/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}] [2]
-(Latex.aux)
+llR3n/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
+Overfull \hbox (0.61093pt too wide) in paragraph at lines 31--33
+\T1/pbk/l/n/14.4 aussi en va-leur les re-la-tions hu-maines, per-met-tant ainsi
+
+ []
+
+LaTeX Font Info:    Font shape `T1/pbk/b/n' in size <14.4> not available
+(Font)              Font shape `T1/pbk/db/n' tried instead on input line 34.
+[2]
+Overfull \hbox (4.78307pt too wide) in paragraph at lines 47--48
+\T1/pbk/l/n/14.4 tings et vice-versa afin que chaque équipes puissent
+ []
+
+
+Overfull \hbox (10.48553pt too wide) in paragraph at lines 47--48
+\T1/pbk/l/n/14.4 in-cluses dans les dif-fé-rents sprints pour qu'ils soient
+ []
+
+[3] [4]
+Overfull \hbox (36.27583pt too wide) in paragraph at lines 90--91
+[]\T1/pbk/db/n/14.4 Tests \T1/pbk/l/n/14.4 : Vé-ri-fi-ca-tion que les fonc-tion
+s (ajou-ter/supprimer
+ []
+
+[5] [6] [7] (Latex.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 3672 strings out of 467870
- 62728 string characters out of 5417387
+ 3678 strings out of 467870
+ 62838 string characters out of 5417387
  480945 words of memory out of 5000000
- 32562 multiletter control sequences out of 15000+600000
- 635671 words of font info for 51 fonts, out of 8000000 for 9000
+ 32566 multiletter control sequences out of 15000+600000
+ 637175 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  53i,5n,84p,550b,385s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\WillR3n\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ec
 rm1200.pk> <C:\Users\WillR3n\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/d
 pi600\ecbx1440.pk> <C:\Users\WillR3n\AppData\Local\MiKTeX\fonts/pk/ljfour/jknap
 pen/ec/dpi600\ecbx1728.pk><C:/Users/WillR3n/AppData/Local/Programs/MiKTeX/fonts
-/type1/urw/bookman/ubkl8a.pfb>
-Output written on Latex.pdf (2 pages, 40373 bytes).
+/type1/urw/bookman/ubkd8a.pfb><C:/Users/WillR3n/AppData/Local/Programs/MiKTeX/f
+onts/type1/urw/bookman/ubkl8a.pfb>
+Output written on Latex.pdf (7 pages, 73911 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
+ 124 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
