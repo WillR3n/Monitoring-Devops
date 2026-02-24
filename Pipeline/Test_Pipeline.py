@@ -1,8 +1,8 @@
-from Pipeline import Pipeline, Library
+from Book import Book, Library
  
 def test_add_book():
-     lib = Pipeline()
-     book = Pipeline("Python","willi")
+     lib = Library()
+     book = Book("Python","willi")
     
      lib.add_book(book)
      
@@ -10,7 +10,7 @@ def test_add_book():
 
 def test_borrow_book():
     lib = Library()
-    book = Pipeline("Python", "Willi")
+    book = Book("Python", "Willi")
     
     lib.add_book(book)
     
