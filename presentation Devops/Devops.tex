@@ -1,0 +1,152 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\geometry{
+    a4paper,
+    margin=2.5cm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdftitle={Fiche d'objectifs et attentes - Docker},
+    pdfauthor={Ton Nom}
+}
+
+\title{\textbf{Comprendre et manipuler Docker} \\
+\large Lecture guidée - Optimisez votre déploiement en créant des conteneurs avec Docker}
+\author{William Fogou}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section*{Introduction}
+Ce document est un rendu personnel basé sur le cours OpenClassrooms \textit{“Optimisez votre déploiement en créant des conteneurs avec Docker”}. L’objectif est de montrer ma compréhension des concepts clés, avec mes propres mots, et d’identifier les points sur lesquels j’ai besoin de m’exercer ou d’être accompagné.
+
+\newpage
+
+\section{Partie 1 – Comprendre l'intérêt de Docker et des conteneurs}
+
+\subsection{Qu'est-ce qu'un conteneur et en quoi est-il différent d'une machine virtuelle ? Quels problèmes concrets Docker résout-il ?}
+
+Un conteneur, c’est comme une petite boîte qui contient tout ce qu’il faut pour faire tourner une application : le code, les configurations, les bibliothèques. La différence avec une machine virtuelle (VM), c’est que le conteneur n’embarque pas son propre système d’exploitation. Il utilise celui de la machine hôte, donc il est beaucoup plus léger et démarre plus vite.
+
+Avant Docker, on avait souvent des problèmes du style “ça marche sur ma machine, mais pas sur le serveur”. Docker résout ça en encapsulant l’application dans un environnement identique partout. Pour le développement, ça évite de tout installer manuellement. Pour le déploiement, ça garantit que l’application tournera pareil en production.
+
+\subsection{Exemples concrets d'avantages}
+
+\begin{itemize}
+    \item \textbf{Pour un développeur sur son PC :} Je veux tester une application qui a besoin d’une base de données MySQL et d’un serveur Redis. Au lieu d’installer MySQL et Redis directement sur mon PC (ce qui peut être long et compliqué à désinstaller), je lance deux conteneurs Docker. Si je veux arrêter ou supprimer, je le fais en une commande, sans rien laisser de sale sur ma machine.
+    \item \textbf{Pour une équipe DevOps / en production :} L’équipe doit déployer une nouvelle version de l’application. Avec Docker, on construit une image, on la pousse sur un registre, et on la déploie sur les serveurs. Si un serveur plante, on relance le conteneur ailleurs. C’est rapide et on est sûrs que l’environnement d’exécution est strictement le même que celui des tests.
+\end{itemize}
+
+\subsection{Question personnelle : ce qui me motive et ce qui me fait peur}
+
+ Ce qui me donne envie, c’est de pouvoir lancer des projets et des conteneurs sans polluer mon PC. Ce qui me fait peur, c’est de me perdre dans les commandes et de ne pas comprendre comment creer un conteneur fonctionnel et de bien le configurer en réseaux avec d'autres conteneurs.
+\vspace{2cm}
+
+\section{Partie 2 – Manipuler des images et des conteneurs de base}
+
+\subsection{Différence entre image et conteneur}
+
+Une \textbf{image}, c’est un peu comme un moule ou un plan de construction. C’est un fichier figé qui contient tout le nécessaire pour exécuter un logiciel. Un \textbf{conteneur}, c’est une instance de ce moule : c’est l’image “en action”, qui tourne vraiment.
+
+\subsection{Explication de \texttt{docker run}}
+
+La commande \texttt{docker run ...} sert à lancer un conteneur à partir d’une image. Si l’image n’est pas déjà sur la machine, Docker va la télécharger automatiquement. Ensuite, il crée le conteneur et le démarre.
+
+\subsection{Trois commandes Docker de base (cas de nginx)}
+
+\begin{itemize}
+    \item \texttt{docker pull nginx} : Télécharge l’image officielle de Nginx depuis Docker Hub, sans la lancer. Utile pour préparer une image à l’avance.
+    \item \texttt{docker run nginx} : Lance un conteneur Nginx. Si l’image n’est pas là, Docker fait un \texttt{pull} automatiquement.
+    \item \texttt{docker ps} : Affiche la liste des conteneurs en cours d’exécution. Avec l’option \texttt{-a}, on voit aussi ceux qui sont arrêtés.
+\end{itemize}
+
+\subsection{Mini-scénario : lancer un serveur web Nginx}
+
+\begin{enumerate}
+    \item D’abord, je tape \texttt{docker pull nginx} pour récupérer l’image (ou je lance directement \texttt{docker run}, il la téléchargera tout seul).
+    \item Ensuite, je lance le conteneur avec \texttt{docker run -d -p 8080:80 nginx}. Le \texttt{-d} pour qu’il tourne en arrière-plan, et \texttt{-p} pour que le port 80 du conteneur soit accessible sur le port 8080 de ma machine.
+    \item Je peux vérifier avec \texttt{docker ps} qu’il tourne bien.
+    \item Pour l’arrêter, je fais \texttt{docker stop [ID\_DU\_CONTENEUR]}.
+    \item Si je veux le supprimer, je fais \texttt{docker rm [ID\_DU\_CONTENEUR]} (mais il faut d’abord l’arrêter).
+\end{enumerate}
+
+\section{Partie 3 – Créer sa propre image avec un Dockerfile}
+
+\subsection{C'est quoi un Dockerfile ?}
+
+Un \textbf{Dockerfile}, c’est un fichier texte qui contient la recette pour construire une image Docker. C’est comme une liste d’instructions à suivre pour que Docker prépare l’environnement exact dont j’ai besoin.
+
+\subsection{Les instructions principales}
+
+\begin{itemize}
+    \item \textbf{FROM} : Indique l’image de base. Exemple : \texttt{FROM ubuntu:latest} ou \texttt{FROM python:3.9}.
+    \item \textbf{RUN} : Exécute des commandes pendant la construction de l’image. Exemple : \texttt{RUN apt-get update \&\& apt-get install -y curl}.
+    \item \textbf{COPY} : Copie des fichiers de mon ordinateur vers l’image. Exemple : \texttt{COPY ./mon-script.sh /scripts/}.
+    \item \textbf{CMD} : Définit la commande à exécuter quand un conteneur est lancé à partir de cette image. Exemple : \texttt{CMD ["python", "app.py"]}.
+\end{itemize}
+
+\subsection{Étapes pour personnaliser une image}
+
+\begin{enumerate}
+    \item Je crée un dossier projet sur ma machine, avec mes fichiers (par exemple un script Python \texttt{app.py}).
+    \item Dans ce dossier, je crée un fichier \texttt{Dockerfile} qui décrit les étapes : FROM python, COPY app.py, CMD python app.py.
+    \item J’ouvre un terminal dans ce dossier, et je tape \texttt{docker build -t mon-app .} pour construire l’image.
+    \item Une fois l’image construite, je lance un conteneur avec \texttt{docker run mon-app}.
+\end{enumerate}
+
+\section{Partie 4 – Gérer les données (volumes) et la configuration (ports, variables d’environnement)}
+
+\subsection{Différence entre données dans un conteneur et dans un volume}
+
+Les données dans un conteneur sont éphémères : si je supprime le conteneur, les données disparaissent. Les données dans un \textbf{volume} sont stockées sur mon disque dur, à l’extérieur du conteneur. Même si je supprime le conteneur, les données restent.
+
+\subsection{Exemple concret d'utilisation d'un volume}
+
+Je lance une base de données PostgreSQL. Je ne veux pas perdre les données si le conteneur s’arrête. Je crée un volume et je le monte dans le conteneur. Comme ça, les fichiers de la base sont sauvegardés sur ma machine.
+
+\subsection{Mapper un port et passer des variables d’environnement}
+
+\begin{itemize}
+    \item \textbf{Mapper un port} : \texttt{-p 8080:80} veut dire “tout ce qui arrive sur le port 8080 de ma machine est redirigé vers le port 80 du conteneur”. C’est comme si je disais au conteneur d’être accessible de l’extérieur.
+    \item \textbf{Variables d’environnement} : \texttt{-e MOT\_DE\_PASSE=secret} permet de passer des réglages à l’application dans le conteneur sans avoir à les écrire en dur dans l’image. Par exemple, pour donner le mot de passe de la base de données.
+\end{itemize}
+
+\section{Partie 5 – Lien entre Docker et le parcours DevOps (CI/CD, VM, Shell, Git)}
+
+\subsection{Intégration de Docker dans une démarche DevOps}
+
+\begin{itemize}
+    \item \textbf{Développement} : Je code dans un environnement conteneurisé, je suis sûr que ça tourne pareil que sur les serveurs.
+    \item \textbf{Tests} : Dans une pipeline CI/CD (par exemple avec GitLab CI), on lance des conteneurs pour exécuter les tests automatiquement, dans un environnement propre à chaque exécution.
+    \item \textbf{Déploiement} : On pousse l’image construite vers un registre, et on la déploie en production. Si ça ne marche pas, on revient à l’image précédente en une commande.
+\end{itemize}
+
+\subsection{Lien avec les outils déjà vus}
+
+\begin{itemize}
+    \item \textbf{Linux / Shell} : Les commandes Docker s’utilisent dans le terminal. Savoir naviguer, lister des fichiers, comprendre les permissions m’aide à mieux comprendre ce qui se passe dans les conteneurs.
+    \item \textbf{Git} : Les Dockerfiles sont des fichiers comme les autres, je peux les versionner avec Git. Si quelqu’un propose une amélioration, on peut en discuter via une Pull Request.
+    \item \textbf{Machines virtuelles} : Une VM émule tout un ordinateur (avec son OS), c’est lourd. Un conteneur est léger et partage le noyau de l’hôte. Dans un pipeline, les VM peuvent servir à isoler des étapes de build, mais les conteneurs sont parfaits pour exécuter l’application elle-même.
+\end{itemize}
+
+\subsection{Questions personnelles sur ma pratique}
+
+
+Je me sens prêt à lancer des conteneurs simples comme Nginx ou MySQL. J’aimerais qu’on prenne plus de temps sur la création de Dockerfiles et sur la façon de connecter plusieurs conteneurs entre eux et aussi le concept de volume.
+
+
+\end{document}
