@@ -1,0 +1,497 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{hmargin=2.5cm, vmargin=2.5cm}
+
+% Configuration de l'affichage du code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    language=Python,
+    literate={é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ç}{{\c{c}}}1,
+}
+
+\lstset{style=mystyle}
+
+\title{\textbf{Cours d'Informatique pour Débutants} \\
+\large Programmation Orientée Objet en Python \& Conteneurisation avec Docker}
+\author{Votre Enseignant}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ======================================================================
+% PREMIER COURS : PROGRAMMATION ORIENTEE OBJET EN PYTHON
+% ======================================================================
+\section{Programmation Orientée Objet en Python}
+
+\subsection{Introduction à la Programmation Orientée Objet (POO)}
+La programmation orientée objet est un paradigme de programmation qui organise le code autour de la notion d'\textbf{objets}. Un objet est une entité qui possède des \textbf{attributs} (ses caractéristiques) et des \textbf{méthodes} (ses actions). Cette approche permet de modéliser le monde réel de manière plus intuitive.
+
+\subsection{Différence entre Programmation Procédurale et Orientée Objet}
+\begin{itemize}
+    \item \textbf{Procédurale} : On se concentre sur les fonctions et la logique. Les données et les fonctions sont séparées. (Exemple : C, Pascal).
+    \item \textbf{Orientée Objet} : On regroupe les données (attributs) et les fonctions (méthodes) qui agissent sur ces données dans des \textbf{classes}. (Exemple : Python, Java, C++).
+\end{itemize}
+
+\subsection{Définition d'une classe en Python}
+Une classe est un modèle (un moule) qui permet de créer des objets.
+\begin{lstlisting}
+class Chien:
+    # Le corps de la classe
+    pass
+\end{lstlisting}
+
+\subsection{Création d'objets}
+Un objet est une \textbf{instance} d'une classe.
+\begin{lstlisting}
+class Chien:
+    pass
+
+# Creation d'objets (instances)
+mon_chien = Chien()
+ton_chien = Chien()
+
+print(mon_chien) # Affiche : <__main__.Chien object at 0x...>
+\end{lstlisting}
+
+\subsection{Attributs et Méthodes}
+\begin{itemize}
+    \item \textbf{Attributs} : Variables propres à l'objet.
+    \item \textbf{Méthodes} : Fonctions propres à l'objet.
+\end{itemize}
+\begin{lstlisting}
+class Chien:
+    # Methode
+    def aboyer(self):
+        print("Woof !")
+
+# Creation
+mon_chien = Chien()
+mon_chien.nom = "Rex"  # Ajout dynamique d'un attribut (peu recommande)
+mon_chien.aboyer()     # Appel de la methode
+\end{lstlisting}
+
+\subsection{Le constructeur \texttt{\_\_init\_\_}}
+Le constructeur est une méthode spéciale appelée automatiquement à la création de l'objet. Il sert à initialiser les attributs.
+\begin{lstlisting}
+class Chien:
+    def __init__(self, nom, age):
+        self.nom = nom   # Attribut d'instance
+        self.age = age   # Attribut d'instance
+
+    def aboyer(self):
+        return f"{self.nom} dit Woof !"
+
+# Utilisation
+mon_chien = Chien("Medor", 5)
+print(mon_chien.aboyer())
+\end{lstlisting}
+
+\subsection{Encapsulation}
+L'encapsulation est le principe qui consiste à restreindre l'accès direct à certaines données. En Python, on utilise une convention : un attribut précédé d'un underscore \texttt{\_} est considéré comme "protégé".
+\begin{lstlisting}
+class CompteBancaire:
+    def __init__(self, titulaire, solde):
+        self.titulaire = titulaire
+        self._solde = solde  # Attribut protege
+
+    def deposer(self, montant):
+        if montant > 0:
+            self._solde += montant
+
+    def afficher_solde(self):
+        return f"Solde : {self._solde} euros"
+\end{lstlisting}
+
+\subsection{Méthodes \texttt{get} et \texttt{set}}
+On utilise des méthodes pour accéder (getter) et modifier (setter) les attributs protégés de manière contrôlée.
+\begin{lstlisting}
+class Personne:
+    def __init__(self, nom):
+        self._nom = nom
+
+    # Getter
+    def get_nom(self):
+        return self._nom
+
+    # Setter
+    def set_nom(self, nouveau_nom):
+        if nouveau_nom:
+            self._nom = nouveau_nom
+        else:
+            print("Erreur : nom invalide")
+
+p = Personne("Alice")
+print(p.get_nom())
+p.set_nom("Bob")
+\end{lstlisting}
+
+\subsection{Héritage}
+L'héritage permet de créer une nouvelle classe (classe fille) à partir d'une classe existante (classe mère). La fille hérite des attributs et méthodes de la mère.
+\begin{lstlisting}
+class Animal: # Classe mere
+    def __init__(self, nom):
+        self.nom = nom
+    def parler(self):
+        return "..."
+
+class Chat(Animal): # Classe fille
+    def parler(self):
+        return f"{self.nom} dit Miaou !"
+
+class Chien(Animal): # Classe fille
+    def parler(self):
+        return f"{self.nom} dit Woof !"
+
+# Utilisation
+animaux = [Chat("Felix"), Chien("Rex")]
+for a in animaux:
+    print(a.parler())
+\end{lstlisting}
+
+\subsection{Polymorphisme}
+Le polymorphisme (du grec "plusieurs formes") permet à différentes classes d'utiliser une même méthode de manière spécifique. Dans l'exemple ci-dessus, la méthode \texttt{parler()} est polymorphique.
+
+\subsection{Exemple complet de programme Python}
+\begin{lstlisting}
+# Definition d'une classe Vehicule
+class Vehicule:
+    def __init__(self, marque, modele, annee):
+        self.marque = marque
+        self.modele = modele
+        self.annee = annee
+        self._kilometrage = 0
+
+    def rouler(self, km):
+        if km > 0:
+            self._kilometrage += km
+            print(f"Le vehicule a roule {km} km.")
+        else:
+            print("Distance invalide.")
+
+    def get_kilometrage(self):
+        return self._kilometrage
+
+    def __str__(self):
+        return f"{self.marque} {self.modele} ({self.annee})"
+
+# Heritage : Voiture est une sorte de Vehicule
+class Voiture(Vehicule):
+    def __init__(self, marque, modele, annee, nb_portes):
+        super().__init__(marque, modele, annee) # Appel du constructeur parent
+        self.nb_portes = nb_portes
+
+    def klaxonner(self):
+        print("Tut tut !")
+
+    def __str__(self):
+        return super().__str__() + f" - {self.nb_portes} portes"
+
+# Programme principal
+if __name__ == "__main__":
+    ma_voiture = Voiture("Toyota", "Yaris", 2020, 5)
+    print(ma_voiture)
+    ma_voiture.rouler(150)
+    print(f"Kilometrage: {ma_voiture.get_kilometrage()} km")
+    ma_voiture.klaxonner()
+\end{lstlisting}
+
+\subsection{Exercices Corrigés}
+\subsubsection{Exercice 1 : Livre}
+Créez une classe \texttt{Livre} avec les attributs \texttt{titre}, \texttt{auteur} et \texttt{annee}. Ajoutez une méthode \texttt{description()} qui retourne une chaîne formatée.
+\\[0.5cm]
+\textbf{Correction :}
+\begin{lstlisting}
+class Livre:
+    def __init__(self, titre, auteur, annee):
+        self.titre = titre
+        self.auteur = auteur
+        self.annee = annee
+    def description(self):
+        return f"'{self.titre}' par {self.auteur} ({self.annee})"
+
+livre = Livre("1984", "George Orwell", 1949)
+print(livre.description())
+\end{lstlisting}
+
+\subsubsection{Exercice 2 : Compteur}
+Créez une classe \texttt{Compteur} avec un attribut privé \texttt{\_valeur}. Implémentez les méthodes \texttt{incrementer()} et \texttt{get\_valeur()}. Empêchez la valeur de devenir négative.
+\\[0.5cm]
+\textbf{Correction :}
+\begin{lstlisting}
+class Compteur:
+    def __init__(self):
+        self._valeur = 0
+    def incrementer(self, pas=1):
+        if pas > 0:
+            self._valeur += pas
+    def get_valeur(self):
+        return self._valeur
+
+c = Compteur()
+c.incrementer(5)
+print(c.get_valeur())
+\end{lstlisting}
+
+\newpage
+
+% ======================================================================
+% DEUXIEME COURS : CONTENEURISATION AVEC DOCKER
+% ======================================================================
+\section{Conteneurisation avec Docker}
+
+\subsection{Introduction à la conteneurisation}
+La conteneurisation est une méthode de virtualisation légère qui permet d'empaqueter une application et ses dépendances dans un environnement isolé appelé \textbf{conteneur}. Cela garantit que l'application fonctionne de manière identique quel que soit l'environnement (développement, test, production).
+
+\subsection{Différence entre Machines Virtuelles et Conteneurs}
+\begin{itemize}
+    \item \textbf{Machine Virtuelle (VM)} : Inclut le système d'exploitation invité complet, ce qui la rend lourde (plusieurs Go) et lente à démarrer. L'hyperviseur virtualise le matériel.
+    \item \textbf{Conteneur} : Partage le noyau du système d'exploitation hôte. Il est léger (quelques Mo), démarre en quelques secondes et consomme moins de ressources.
+\end{itemize}
+
+\subsection{Présentation de Docker}
+Docker est la plateforme de conteneurisation la plus populaire. Elle permet de créer, déployer et exécuter des applications dans des conteneurs.
+
+\subsection{Installation de Docker}
+\begin{itemize}
+    \item \textbf{Windows/Mac} : Télécharger Docker Desktop sur \url{https://www.docker.com/products/docker-desktop/}
+    \item \textbf{Linux (Ubuntu/Debian)} :
+    \begin{lstlisting}[language=bash]
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+    \end{lstlisting}
+\end{itemize}
+
+\subsection{Architecture de Docker}
+\begin{itemize}
+    \item \textbf{Docker Engine} : Le moteur qui construit et exécute les conteneurs.
+    \item \textbf{Images} : Modèles en lecture seule (comme une classe en POO) utilisés pour créer des conteneurs.
+    \item \textbf{Conteneurs} : Instances exécutables d'une image (comme un objet).
+    \item \textbf{Registry} : Dépôt d'images (ex: Docker Hub).
+\end{itemize}
+
+\subsection{Explication détaillée des commandes Docker}
+
+\subsubsection{\texttt{docker pull}}
+Télécharge une image depuis un registry sans l'exécuter.
+\begin{lstlisting}[language=bash]
+docker pull hello-world
+docker pull python:3.9-slim  # Image Python officielle
+\end{lstlisting}
+
+\subsubsection{\texttt{docker images}}
+Liste les images téléchargées sur votre machine.
+\begin{lstlisting}[language=bash]
+docker images
+\end{lstlisting}
+
+\subsubsection{\texttt{docker run}}
+Crée et démarre un conteneur à partir d'une image.
+\begin{itemize}
+    \item \texttt{-d} : mode détaché (en arrière-plan)
+    \item \texttt{-it} : mode interactif avec terminal
+    \item \texttt{--name} : donne un nom au conteneur
+    \item \texttt{-p 8080:80} : mappe le port 8080 de l'hôte au port 80 du conteneur
+\end{itemize}
+\begin{lstlisting}[language=bash]
+docker run hello-world
+docker run -d -p 8080:80 --name mon_nginx nginx
+docker run -it python:3.9-slim bash
+\end{lstlisting}
+
+\subsubsection{\texttt{docker ps}}
+Liste les conteneurs en cours d'exécution. \texttt{docker ps -a} liste tous les conteneurs (même arrêtés).
+\begin{lstlisting}[language=bash]
+docker ps
+docker ps -a
+\end{lstlisting}
+
+\subsubsection{\texttt{docker stop}}
+Arrête un ou plusieurs conteneurs en cours d'exécution.
+\begin{lstlisting}[language=bash]
+docker stop mon_nginx
+docker stop id_conteneur
+\end{lstlisting}
+
+\subsubsection{\texttt{docker start}}
+Démarre un conteneur arrêté.
+\begin{lstlisting}[language=bash]
+docker start mon_nginx
+\end{lstlisting}
+
+\subsubsection{\texttt{docker rm}}
+Supprime un ou plusieurs conteneurs (ils doivent être arrêtés).
+\begin{lstlisting}[language=bash]
+docker rm mon_nginx
+docker rm id_conteneur
+\end{lstlisting}
+
+\subsubsection{\texttt{docker exec}}
+Exécute une commande dans un conteneur en cours d'exécution.
+\begin{lstlisting}[language=bash]
+docker exec -it mon_nginx bash  # Ouvre un shell bash dans le conteneur
+docker exec mon_nginx ls -l     # Liste les fichiers sans entrer dans le shell
+\end{lstlisting}
+
+\subsubsection{\texttt{docker build}}
+Construit une image à partir d'un fichier \texttt{Dockerfile}.
+\begin{lstlisting}[language=bash]
+docker build -t mon_app:latest .
+# -t donne un nom et un tag a l'image
+# . indique le chemin du contexte de build (souvent le dossier courant)
+\end{lstlisting}
+
+\subsection{Création d'un conteneur Docker étape par étape}
+\begin{enumerate}
+    \item Télécharger une image : \texttt{docker pull nginx}
+    \item Créer et démarrer un conteneur : \texttt{docker run -d --name site\_web -p 8080:80 nginx}
+    \item Vérifier qu'il tourne : \texttt{docker ps}
+    \item Ouvrir un navigateur à l'adresse \texttt{http://localhost:8080}
+    \item Arrêter le conteneur : \texttt{docker stop site\_web}
+    \item Le supprimer : \texttt{docker rm site\_web}
+\end{enumerate}
+
+\subsection{Création d'un Dockerfile}
+Un \texttt{Dockerfile} est un fichier texte contenant les instructions pour construire une image Docker.
+
+\subsubsection{Instructions détaillées}
+\begin{itemize}
+    \item \textbf{FROM} : Spécifie l'image de base. \texttt{FROM python:3.9-slim}
+    \item \textbf{WORKDIR} : Définit le répertoire de travail dans le conteneur. \texttt{WORKDIR /app}
+    \item \textbf{COPY} : Copie des fichiers de l'hôte vers le conteneur. \texttt{COPY requirements.txt .}
+    \item \textbf{RUN} : Exécute des commandes lors de la construction de l'image (ex: installation de dépendances). \texttt{RUN pip install -r requirements.txt}
+    \item \textbf{CMD} : Commande exécutée par défaut quand le conteneur démarre. Il ne peut y en avoir qu'une. \texttt{CMD ["python", "app.py"]}
+    \item \textbf{EXPOSE} : Indique le port sur lequel le conteneur écoute (informationnelle). \texttt{EXPOSE 5000}
+\end{itemize}
+
+\subsubsection{Exemple complet : Dockerfile pour une application Python}
+Imaginons une application Python simple avec Flask.
+\\[0.5cm]
+\textbf{Structure du projet :}
+\begin{verbatim}
+mon_app/
+    app.py
+    requirements.txt
+    Dockerfile
+\end{verbatim}
+\textbf{Contenu de \texttt{app.py}:}
+\begin{lstlisting}
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return "Hello, Docker !"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+\end{lstlisting}
+\textbf{Contenu de \texttt{requirements.txt}:}
+\begin{lstlisting}
+Flask==2.2.3
+\end{lstlisting}
+\textbf{Contenu du \texttt{Dockerfile}:}
+\begin{lstlisting}[language=bash]
+# Utiliser une image Python officielle comme base
+FROM python:3.9-slim
+
+# Definir le repertoire de travail
+WORKDIR /app
+
+# Copier le fichier des dependances
+COPY requirements.txt .
+
+# Installer les dependances Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier tout le code de l'application
+COPY . .
+
+# Indiquer le port utilise par l'application
+EXPOSE 5000
+
+# Commande pour lancer l'application
+CMD ["python", "app.py"]
+\end{lstlisting}
+\textbf{Construction et exécution :}
+\begin{lstlisting}[language=bash]
+docker build -t ma_flask_app .
+docker run -d -p 5000:5000 --name mon_site ma_flask_app
+# Aller sur http://localhost:5000
+\end{lstlisting}
+
+\subsection{Exercices Pratiques avec Correction}
+\subsubsection{Exercice 1 : Conteneuriser un script simple}
+Créez un script Python \texttt{hello.py} qui affiche "Bonjour le monde !". Écrivez un \texttt{Dockerfile} basé sur \texttt{python:alpine} qui copie le script et l'exécute avec \texttt{CMD}.
+\\[0.5cm]
+\textbf{Correction :}
+\begin{lstlisting}[language=bash]
+# hello.py
+print("Bonjour le monde !")
+
+# Dockerfile
+FROM python:alpine
+WORKDIR /app
+COPY hello.py .
+CMD ["python", "hello.py"]
+
+# Construction et execution
+docker build -t hello .
+docker run hello
+\end{lstlisting}
+
+\subsubsection{Exercice 2 : Gestion de conteneurs}
+1. Lancez un conteneur \texttt{nginx} nommé \texttt{web1} sur le port 8081. \\
+2. Vérifiez qu'il tourne. \\
+3. Ouvrez un shell à l'intérieur et modifiez la page d'accueil (fichier \texttt{/usr/share/nginx/html/index.html}). \\
+4. Arrêtez et supprimez le conteneur.
+\\[0.5cm]
+\textbf{Correction :}
+\begin{lstlisting}[language=bash]
+# 1.
+docker run -d --name web1 -p 8081:80 nginx
+# 2.
+docker ps
+# 3.
+docker exec -it web1 bash
+echo "<h1>Ma page modifiee</h1>" > /usr/share/nginx/html/index.html
+exit
+# 4.
+docker stop web1
+docker rm web1
+\end{lstlisting}
+
+\end{document}

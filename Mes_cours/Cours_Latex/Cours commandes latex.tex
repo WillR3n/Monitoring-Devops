@@ -1,0 +1,386 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}    % Pour les images
+\usepackage{listings}    % Pour le code
+\usepackage{xcolor}      % Pour les couleurs dans le code
+\usepackage{geometry}    % Pour les marges
+\geometry{hmargin=2.5cm, vmargin=2.5cm}
+\usepackage{hyperref}    % Pour les liens
+
+% Configuration de l'affichage du code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    language=TeX,
+    literate={é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ç}{{\c{c}}}1,
+}
+\lstset{style=mystyle}
+
+\title{\textbf{Apprendre \LaTeX{} pour les documents académiques}}
+\author{Un professeur passionné}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Ce document est à la fois un cours et un exemple concret. Chaque section explique une commande \LaTeX, montre son utilisation, et le résultat est visible directement dans le document. Lisez le code source pour comprendre la syntaxe, et observez le PDF pour voir le rendu.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ======================================================================
+% SECTION 1 : INTRODUCTION
+% ======================================================================
+\section{Introduction}
+
+\subsection{Qu'est-ce que \LaTeX ?}
+\LaTeX{} est un système de préparation de documents de haute qualité. Contrairement à un traitement de texte classique (Word, LibreOffice), on ne voit pas le résultat final en temps réel : on écrit du code dans un fichier \texttt{.tex} que l'on compile pour obtenir un PDF.
+
+\subsection{Pourquoi utiliser \LaTeX pour les documents académiques ?}
+\begin{itemize}
+    \item Gestion automatique de la numérotation (sections, figures, tables).
+    \item Gestion des références croisées et des bibliographies.
+    \item Excellent rendu des formules mathématiques.
+    \item Séparation du fond et de la forme : on se concentre sur le contenu.
+    \item Stable, reproductible et gratuit.
+\end{itemize}
+
+% ======================================================================
+% SECTION 2 : STRUCTURE DE BASE
+% ======================================================================
+\section{Structure de base d'un document \LaTeX}
+
+Voici les commandes fondamentales que tout document doit contenir.
+
+\subsection{\textbackslash documentclass}
+Cette commande définit le type de document. Les classes courantes sont : \texttt{article}, \texttt{report}, \texttt{book}.
+\begin{verbatim}
+\documentclass[a4paper,12pt]{article}
+\end{verbatim}
+\textbf{Exemple :} La classe de ce document est \texttt{article} avec des options \texttt{a4paper} et \texttt{12pt}.
+
+\subsection{\textbackslash usepackage}
+Permet d'importer des packages qui ajoutent des fonctionnalités.
+\begin{verbatim}
+\usepackage[utf8]{inputenc}  % Pour les accents
+\usepackage[french]{babel}   % Pour la typographie française
+\end{verbatim}
+\textbf{Exemple :} Nous avons utilisé \texttt{babel} pour avoir des titres en français (Chapitre 1 au lieu de Chapter 1).
+
+\subsection{\textbackslash begin\{document\} ... \textbackslash end\{document\}}
+Tout ce qui est écrit entre ces deux commandes apparaîtra dans le PDF.
+\begin{verbatim}
+\begin{document}
+Votre contenu ici...
+\end{document}
+\end{verbatim}
+
+% ======================================================================
+% SECTION 3 : ORGANISATION D'UN DOCUMENT
+% ======================================================================
+\section{Organisation d'un document}
+
+\subsection{\textbackslash tableofcontents}
+Génère automatiquement une table des matières à partir de vos sections. Il faut compiler deux fois pour que les références soient à jour.
+
+\subsection{Commandes de sectionnement}
+\begin{itemize}
+    \item \texttt{\textbackslash section\{...\}} : Crée une section.
+    \item \texttt{\textbackslash subsection\{...\}} : Crée une sous-section.
+    \item \texttt{\textbackslash subsubsection\{...\}} : Crée une sous-sous-section.
+    \item \texttt{\textbackslash paragraph\{...\}} : Crée un paragraphe titré.
+\end{itemize}
+
+\textbf{Exemple concret :}
+\begin{verbatim}
+\section{Introduction}
+\subsection{Contexte}
+\subsubsection{Historique}
+\paragraph{Note :} Ceci est un paragraphe.
+\end{verbatim}
+\textbf{Résultat :} Vous voyez le rendu dans ce document même. Observez la hiérarchie des titres.
+
+% ======================================================================
+% SECTION 4 : MISE EN FORME DU TEXTE
+% ======================================================================
+\section{Mise en forme du texte}
+
+Voici comment modifier l'apparence du texte.
+
+\subsection{Commandes de style}
+\begin{description}
+    \item[\textbackslash textbf\{texte\}] : Met en \textbf{gras}.
+    \item[\textbackslash textit\{texte\}] : Met en \textit{italique}.
+    \item[\textbackslash underline\{texte\}] : Souligne le \underline{texte}.
+    \item[\textbackslash emph\{texte\}] : Met en emphase (généralement italique). C'est \emph{mieux} que \textit{car ça s'adapte au contexte}.
+\end{description}
+
+\subsection{Tailles de texte}
+On peut changer la taille du texte avec des commandes comme :
+\begin{itemize}
+    \item \texttt{\textbackslash tiny} : \tiny{Texte tout petit}
+    \item \texttt{\textbackslash small} : \small{Texte petit}
+    \item \texttt{\textbackslash normalsize} : \normalsize{Texte normal}
+    \item \texttt{\textbackslash large} : \large{Texte large}
+    \item \texttt{\textbackslash Large} : \Large{Texte plus large}
+    \item \texttt{\textbackslash huge} : \huge{Texte énorme}
+\end{itemize}
+\normalsize % On revient à la taille normale
+
+% ======================================================================
+% SECTION 5 : LISTES
+% ======================================================================
+\section{Listes}
+
+\subsection{Liste non ordonnée (itemize)}
+\begin{verbatim}
+\begin{itemize}
+    \item Premier point
+    \item Deuxième point
+\end{itemize}
+\end{verbatim}
+\textbf{Résultat :}
+\begin{itemize}
+    \item Premier point
+    \item Deuxième point
+\end{itemize}
+
+\subsection{Liste ordonnée (enumerate)}
+\begin{verbatim}
+\begin{enumerate}
+    \item Étape 1
+    \item Étape 2
+\end{enumerate}
+\end{verbatim}
+\textbf{Résultat :}
+\begin{enumerate}
+    \item Étape 1
+    \item Étape 2
+\end{enumerate}
+
+\subsection{Liste descriptive (description)}
+\begin{verbatim}
+\begin{description}
+    \item[Terme 1] Définition du terme 1.
+    \item[Terme 2] Définition du terme 2.
+\end{description}
+\end{verbatim}
+\textbf{Résultat :}
+\begin{description}
+    \item[Terme 1] Définition du terme 1.
+    \item[Terme 2] Définition du terme 2.
+\end{description}
+
+% ======================================================================
+% SECTION 6 : INSERTION D'IMAGES
+% ======================================================================
+\section{Insertion d'images}
+
+Pour insérer des images, il faut le package \texttt{graphicx}.
+
+\subsection{Commandes principales}
+\begin{itemize}
+    \item \texttt{\textbackslash includegraphics[options]\{fichier\}} : Insère l'image.
+    \item \texttt{figure} : Environnement flottant pour les images.
+    \item \texttt{\textbackslash caption} : Légende de l'image.
+    \item \texttt{\textbackslash label} : Marqueur pour référencer l'image.
+\end{itemize}
+
+\textbf{Exemple :} (Si vous avez un fichier \texttt{latex-logo.png} dans le même dossier)
+\begin{verbatim}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{latex-logo}
+    \caption{Le logo de \LaTeX}
+    \label{fig:logo}
+\end{figure}
+Voir la figure~\ref{fig:logo}.
+\end{verbatim}
+
+\noindent Comme nous n'avons pas d'image sous la main, voici un exemple commenté uniquement.
+
+% ======================================================================
+% SECTION 7 : TABLEAUX
+% ======================================================================
+\section{Tableaux}
+
+Les tableaux se créent avec l'environnement \texttt{tabular}.
+
+\subsection{Commandes principales}
+\begin{itemize}
+    \item \texttt{\{l c r\}} : Alignement des colonnes (gauche, centré, droite).
+    \item \texttt{\textbackslash hline} : Ligne horizontale.
+    \item \texttt{\&} : Séparateur de colonnes.
+    \item \texttt{\textbackslash\textbackslash} : Fin de ligne.
+\end{itemize}
+
+\textbf{Exemple :}
+\begin{verbatim}
+\begin{tabular}{|l|c|r|}
+    \hline
+    Gauche & Centré & Droite \\
+    \hline
+    1 & 2 & 3 \\
+    4 & 5 & 6 \\
+    \hline
+\end{tabular}
+\end{verbatim}
+\textbf{Résultat :}
+\begin{center}
+\begin{tabular}{|l|c|r|}
+    \hline
+    Gauche & Centré & Droite \\
+    \hline
+    1 & 2 & 3 \\
+    4 & 5 & 6 \\
+    \hline
+\end{tabular}
+\end{center}
+
+% ======================================================================
+% SECTION 8 : INSERTION DE CODE INFORMATIQUE
+% ======================================================================
+\section{Insertion de code informatique}
+
+Pour insérer du code, on utilise souvent le package \texttt{listings}.
+
+\subsection{Commandes principales}
+\begin{itemize}
+    \item \texttt{\textbackslash usepackage\{listings\}} : Charge le package.
+    \item \texttt{\textbackslash lstset\{...\}} : Configure l'apparence.
+    \item \texttt{begin\{lstlisting\} ... end\{lstlisting\}} : Environnement pour le code.
+\end{itemize}
+
+\textbf{Exemple :} Voici du code \LaTeX{} affiché avec \texttt{listings} :
+\begin{lstlisting}[caption=Exemple de code LaTeX]
+\documentclass{article}
+\begin{document}
+Bonjour le monde !
+\end{document}
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 9 : RÉFÉRENCES ET CITATIONS
+% ======================================================================
+\section{Références et citations}
+
+\subsection{Références croisées}
+On utilise \texttt{\textbackslash label\{nom\}} pour marquer un endroit et \texttt{\textbackslash ref\{nom\}} pour y faire référence.
+
+\textbf{Exemple :} La section \ref{sec:exemple} est un exemple complet. Le paragraphe \ref{par:important} est important.
+
+\subsection{Citations}
+Pour citer des références bibliographiques, on utilise \texttt{\textbackslash cite\{clef\}} avec un fichier \texttt{.bib}. Exemple : \cite{lamport1994latex}.
+
+% ======================================================================
+% SECTION 10 : CRÉATION D'UN BON DOCUMENT ACADÉMIQUE
+% ======================================================================
+\section{Création d'un bon document académique}
+
+\subsection{Page de titre}
+On peut créer une page de titre personnalisée avec l'environnement \texttt{titlepage} ou utiliser \texttt{\textbackslash maketitle} comme au début de ce document.
+
+\subsection{Table des matières}
+Toujours inclure une table des matières (\texttt{\textbackslash tableofcontents}) pour les documents longs.
+
+\subsection{Numérotation}
+La numérotation est automatique. On peut la personnaliser avec des packages comme \texttt{titlesec}.
+
+\subsection{Organisation logique}
+\begin{itemize}
+    \item Commencer par une introduction.
+    \item Développer les concepts dans des sections distinctes.
+    \item Terminer par une conclusion.
+    \item Ajouter des annexes si nécessaire.
+\end{itemize}
+
+% ======================================================================
+% SECTION 11 : EXEMPLE COMPLET
+% ======================================================================
+\section{Exemple complet}
+\label{sec:exemple}
+
+Cette section est un mini-cours à part entière qui utilise toutes les commandes vues précédemment.
+
+\subsection{Présentation du mini-projet}
+Nous allons créer un petit document qui parle de la programmation en Python.
+
+\subsubsection{Introduction au Python}
+Python est un langage de programmation \textbf{interprété}, \textit{dynamique} et \emph{puissant}. Voici une liste de ses caractéristiques :
+\begin{itemize}
+    \item Facile à apprendre
+    \item Grande communauté
+    \item Multi-paradigme
+\end{itemize}
+
+\subsubsection{Exemple de code}
+Voici un exemple classique :
+\begin{lstlisting}[language=Python, caption=Programme Hello World]
+def hello():
+    """Affiche un message"""
+    print("Hello, World!")
+
+if __name__ == "__main__":
+    hello()
+\end{lstlisting}
+
+\paragraph{Note importante :}
+\label{par:important}
+Le code ci-dessus doit être sauvegardé dans un fichier \texttt{.py}.
+
+\subsubsection{Tableau comparatif}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Version} & \textbf{Année} & \textbf{Changements majeurs} \\
+    \hline
+    Python 2 & 2000 & Premier succès populaire \\
+    Python 3 & 2008 & Rétro-incompatible \\
+    \hline
+\end{tabular}
+
+\end{center}
+
+\subsubsection{Pour aller plus loin}
+Comme le montre la section \ref{sec:exemple}, on peut facilement intégrer divers éléments. Pour plus d'informations, consultez \cite{python2023documentation}.
+
+% ======================================================================
+% BIBLIOGRAPHIE
+% ======================================================================
+\begin{thebibliography}{9}
+\bibitem{lamport1994latex}
+Leslie Lamport.
+\textit{\LaTeX: A Document Preparation System}.
+Addison-Wesley, 2nd edition, 1994.
+
+\bibitem{python2023documentation}
+Python Software Foundation.
+\textit{Python Documentation}, 2023.
+\url{https://docs.python.org/}
+\end{thebibliography}
+
+\end{document}

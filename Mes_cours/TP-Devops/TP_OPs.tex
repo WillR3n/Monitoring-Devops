@@ -1,0 +1,779 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% Configuration pour les blocs de code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{lightblue}{rgb}{0.9,0.95,1}
+
+\lstdefinestyle{bashstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    language=bash
+}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    language=Python
+}
+
+\lstset{style=bashstyle}
+
+% Environnement pour les notes importantes
+\newtcolorbox{importantbox}[2][]{
+    colback=lightblue,
+    colframe=blue!50!black,
+    fonttitle=\bfseries,
+    title=#2,
+    #1
+}
+
+\title{\textbf{TP Pratique : Decouverte de Docker pour le DevOps}}
+\author{Enseignant DevOps}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+    \fbox{
+        \begin{minipage}{0.9\textwidth}
+            \textbf{Objectifs du TP :}
+            \begin{itemize}
+                \item Comprendre les concepts de base de la conteneurisation
+                \item Installer et configurer Docker
+                \item Manipuler des images et des conteneurs
+                \item Creer sa propre image avec un Dockerfile
+                \item Deployer une application Python conteneurisee
+            \end{itemize}
+        \end{minipage}
+    }
+\end{center}
+
+\tableofcontents
+\newpage
+
+% ======================================================================
+% SECTION 1 : INTRODUCTION AU DEVOPS
+% ======================================================================
+\section{Introduction au DevOps}
+
+\subsection{Qu'est-ce que le DevOps ?}
+Le \textbf{DevOps} est un ensemble de pratiques qui vise a unifier le developpement logiciel (Dev) et les operations informatiques (Ops). L'objectif principal est de raccourcir le cycle de vie du developpement tout en livrant des fonctionnalites, des correctifs et des mises a jour frequemment, en etroite alignement avec les objectifs metier.
+
+\subsection{Pourquoi automatiser le deploiement ?}
+L'automatisation du deploiement presente plusieurs avantages :
+\begin{itemize}
+    \item \textbf{Reproductibilite} : L'environnement de production est identique a l'environnement de developpement
+    \item \textbf{Rapidite} : Les deploiements sont plus rapides et moins sujets aux erreurs humaines
+    \item \textbf{Fiabilite} : Moins d'erreurs de configuration
+    \item \textbf{Evolution} : Facilite la mise a l'echelle des applications
+\end{itemize}
+
+\subsection{ROle de la conteneurisation}
+La conteneurisation est devenue un pilier du DevOps car elle permet d'emballer une application avec toutes ses dependances dans un environnement isole et portable. Cela resout le celebre probleme "ca marche sur ma machine".
+
+% ======================================================================
+% SECTION 2 : INTRODUCTION A LA CONTENEURISATION
+% ======================================================================
+\section{Introduction a la conteneurisation}
+
+\subsection{Definition d'un conteneur}
+\begin{importantbox}{Definition}
+Un \textbf{conteneur} est une unite standard de logiciel qui empaquette le code et toutes ses dependances pour que l'application s'execute rapidement et de maniere fiable d'un environnement informatique a un autre.
+\end{importantbox}
+
+\subsection{Difference entre machine virtuelle et conteneur}
+
+\begin{center}
+\begin{tabular}{|p{5cm}|p{5cm}|}
+    \hline
+    \textbf{Machine Virtuelle} & \textbf{Conteneur} \\
+    \hline
+    Inclut son propre systeme d'exploitation & Partage le noyau de l'hote \\
+    Demarrage lent (plusieurs minutes) & Demarrage rapide (secondes) \\
+    Taille importante (Go) & Taille legere (Mo) \\
+    Isolation forte & Isolation au niveau processus \\
+    Consommation memoire elevee & Consommation memoire faible \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsection{Presentation de Docker}
+Docker est la plateforme de conteneurisation la plus populaire. Elle permet de :
+\begin{itemize}
+    \item Creer des images (modeles en lecture seule)
+    \item Distribuer ces images via des registres (Docker Hub)
+    \item Executer des conteneurs a partir de ces images
+\end{itemize}
+
+% ======================================================================
+% SECTION 3 : INSTALLATION DE DOCKER
+% ======================================================================
+\section{Installation de Docker}
+
+\subsection{Installation sur Linux (Ubuntu/Debian)}
+\begin{lstlisting}[caption=Installation de Docker sur Ubuntu]
+# Mise a jour des paquets
+sudo apt update
+
+# Installation des prerequis
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+
+# Ajout de la cle GPG officielle de Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Ajout du depot Docker
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Installation de Docker
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io
+
+# Demarrage du service Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Ajout de l'utilisateur courant au groupe docker (pour eviter sudo)
+sudo usermod -aG docker $USER
+
+# IMPORTANT : Deconnectez-vous et reconnectez-vous pour que les changements prennent effet
+\end{lstlisting}
+
+\subsection{Verification de l'installation}
+\begin{lstlisting}[caption=Verifier que Docker est bien installe]
+# Verifier la version de Docker
+docker --version
+
+# Verifier que le service tourne
+systemctl status docker
+
+# Tester Docker sans sudo (apres reconnexion)
+docker version
+\end{lstlisting}
+
+\subsection{Premiere commande Docker}
+\begin{lstlisting}[caption=Premier conteneur]
+# Lancer le conteneur "hello-world" pour tester
+docker run hello-world
+
+# Cette commande va :
+# 1. Chercher l'image 'hello-world' localement
+# 2. La telecharger depuis Docker Hub si absente
+# 3. Creer et demarrer un conteneur
+# 4. Afficher un message de bienvenue
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 4 : MANIPULATION DES IMAGES DOCKER
+% ======================================================================
+\section{Manipulation des images Docker}
+
+\subsection{Commande docker pull}
+\begin{lstlisting}[caption=Telecharger des images]
+# Syntaxe : docker pull <nom_image>:<tag>
+# Le tag "latest" est utilise par defaut
+
+# Telecharger la derniere version de nginx
+docker pull nginx
+
+# Telecharger une version specifique d'Ubuntu
+docker pull ubuntu:22.04
+
+# Telecharger l'image Python officielle
+docker pull python:3.9-slim
+
+# Explication : Ces images sont stockees localement pour etre utilisees plus tard
+\end{lstlisting}
+
+\subsection{Commande docker images}
+\begin{lstlisting}[caption=Lister les images disponibles]
+# Afficher toutes les images telechargees
+docker images
+
+# Afficher avec plus de details
+docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
+# Explication : Cette commande montre :
+# - Le depot (nom de l'image)
+# - Le tag (version)
+# - L'ID de l'image
+# - La date de creation
+# - La taille
+\end{lstlisting}
+
+\subsection{Commande docker search}
+\begin{lstlisting}[caption=Chercher des images sur Docker Hub]
+# Rechercher des images liees a Python
+docker search python
+
+# Rechercher avec des filtres
+docker search --filter stars=1000 --filter is-official=true nginx
+
+# Explication : Cette commande interroge Docker Hub pour trouver des images publiques
+\end{lstlisting}
+
+\subsection{Commande docker rmi}
+\begin{lstlisting}[caption=Supprimer des images]
+# Supprimer une image specifique
+docker rmi nginx
+
+# Supprimer plusieurs images
+docker rmi ubuntu:22.04 python:3.9-slim
+
+# Supprimer toutes les images non utilisees
+docker image prune
+
+# Explication : On ne peut supprimer une image que si aucun conteneur ne l'utilise
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 5 : CREATION D'UN CONTENEUR
+% ======================================================================
+\section{Creation d'un conteneur}
+
+\subsection{Commande docker run}
+\begin{lstlisting}[caption=Lancer des conteneurs]
+# Lancer un conteneur Nginx en mode interactif
+docker run nginx
+# ^ Cette commande bloque le terminal (mode attache)
+
+# Lancer en mode detache (arriere-plan)
+docker run -d nginx
+
+# Lancer avec un nom personnalise et mapping de ports
+docker run -d --name mon_nginx -p 8080:80 nginx
+# Explication : -p 8080:80 mappe le port 8080 de l'hote vers le port 80 du conteneur
+
+# Lancer un conteneur interactif avec shell
+docker run -it ubuntu bash
+# -i : interactif, -t : pseudo-terminal
+
+# Lancer et supprimer automatiquement apres arret
+docker run --rm hello-world
+\end{lstlisting}
+
+\subsection{Commande docker ps}
+\begin{lstlisting}[caption=Lister les conteneurs]
+# Afficher les conteneurs en cours d'execution
+docker ps
+
+# Afficher tous les conteneurs (meme arretes)
+docker ps -a
+
+# Afficher avec format personnalise
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Explication : Utile pour voir quels conteneurs tournent et leurs IDs
+\end{lstlisting}
+
+\subsection{Commande docker stop}
+\begin{lstlisting}[caption=Arreter des conteneurs]
+# Arreter un conteneur par son nom
+docker stop mon_nginx
+
+# Arreter un conteneur par son ID
+docker stop 1a2b3c4d5e6f
+
+# Arreter plusieurs conteneurs
+docker stop conteneur1 conteneur2
+
+# Explication : Envoie un signal SIGTERM au processus principal du conteneur
+\end{lstlisting}
+
+\subsection{Commande docker start}
+\begin{lstlisting}[caption=Demarrer un conteneur arrete]
+# Demarrer un conteneur existant
+docker start mon_nginx
+
+# Demarrer en mode attache
+docker start -a mon_nginx
+
+# Explication : Reutilise un conteneur deja cree sans en recreer un nouveau
+\end{lstlisting}
+
+\subsection{Commande docker rm}
+\begin{lstlisting}[caption=Supprimer des conteneurs]
+# Supprimer un conteneur arrete
+docker rm mon_nginx
+
+# Forcer la suppression d'un conteneur en cours d'execution
+docker rm -f mon_nginx
+
+# Supprimer plusieurs conteneurs
+docker rm conteneur1 conteneur2 conteneur3
+
+# Supprimer tous les conteneurs arretes
+docker container prune
+
+# Explication : Les conteneurs doivent etre arretes (sauf avec -f)
+\end{lstlisting}
+
+\subsection{Exemple complet : Lancer Nginx}
+\begin{lstlisting}[caption=Lancer un serveur web Nginx]
+# 1. Telecharger l'image Nginx
+docker pull nginx
+
+# 2. Lancer un conteneur Nginx
+docker run -d --name serveur_web -p 8080:80 nginx
+
+# 3. Verifier que le conteneur tourne
+docker ps
+
+# 4. Tester dans le navigateur : http://localhost:8080
+
+# 5. Voir les logs
+docker logs serveur_web
+
+# 6. Arreter le conteneur
+docker stop serveur_web
+
+# 7. Le supprimer
+docker rm serveur_web
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 6 : CREATION D'UNE IMAGE PERSONNALISEE
+% ======================================================================
+\section{Creation d'une image personnalisee}
+
+\subsection{Qu'est-ce qu'une image Docker ?}
+Une image Docker est un modele en lecture seule contenant les instructions pour creer un conteneur. Elle est construite a partir d'un fichier appele \textbf{Dockerfile}.
+
+\subsection{Pourquoi creer sa propre image ?}
+\begin{itemize}
+    \item Personnaliser l'environnement selon les besoins de votre application
+    \item Embarquer votre code source
+    \item Installer des dependances specifiques
+    \item Garantir la reproductibilite
+\end{itemize}
+
+% ======================================================================
+% SECTION 7 : CREATION D'UN DOCKERFILE
+% ======================================================================
+\section{Creation d'un Dockerfile}
+
+\subsection{Structure d'un Dockerfile}
+\begin{lstlisting}[caption=Instructions de base d'un Dockerfile]
+# FROM : Image de base
+FROM python:3.9-slim
+
+# WORKDIR : Definit le repertoire de travail
+WORKDIR /app
+
+# COPY : Copie des fichiers de l'hote vers le conteneur
+COPY requirements.txt .
+COPY app.py .
+
+# RUN : Execute des commandes pendant la construction
+RUN pip install --no-cache-dir -r requirements.txt
+
+# EXPOSE : Informe que le conteneur ecoute sur ce port
+EXPOSE 5000
+
+# CMD : Commande executee au demarrage du conteneur
+CMD ["python", "app.py"]
+\end{lstlisting}
+
+\subsection{Exemple complet : Application Python Flask}
+Creons une application web simple avec Flask.
+
+\subsubsection{Structure du projet}
+\begin{lstlisting}[caption=Arborescence du projet]
+mon_app_flask/
+    app.py
+    requirements.txt
+    Dockerfile
+\end{lstlisting}
+
+\subsubsection{Code de l'application (app.py)}
+\begin{lstlisting}[style=pythonstyle, caption=Application Flask simple]
+from flask import Flask
+import socket
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return """
+    <html>
+        <head><title>Ma super app</title></head>
+        <body>
+            <h1>Bienvenue dans mon conteneur Docker !</h1>
+            <p>Cette application tourne dans un conteneur.</p>
+            <p>Hostname: <strong>{}</strong></p>
+        </body>
+    </html>
+    """.format(socket.gethostname())
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+\end{lstlisting}
+
+\subsubsection{Fichier de dependances (requirements.txt)}
+\begin{lstlisting}[caption=Demarches Python]
+Flask==2.3.2
+\end{lstlisting}
+
+\subsubsection{Dockerfile}
+\begin{lstlisting}[caption=Dockerfile pour l'application Flask]
+# Utiliser l'image officielle Python comme base
+FROM python:3.9-slim
+
+# Definir le maintainer (optionnel)
+LABEL maintainer="etudiant@example.com"
+
+# Definir le repertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier d'abord le fichier des dependances (optimisation du cache)
+COPY requirements.txt .
+
+# Installer les dependances
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier le reste du code
+COPY app.py .
+
+# Informer que l'application utilise le port 5000
+EXPOSE 5000
+
+# Commande pour lancer l'application
+CMD ["python", "app.py"]
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 8 : CONSTRUCTION DE L'IMAGE
+% ======================================================================
+\section{Construction de l'image}
+
+\subsection{Commande docker build}
+\begin{lstlisting}[caption=Construire une image]
+# Se placer dans le dossier contenant le Dockerfile
+cd mon_app_flask
+
+# Construire l'image avec un tag
+docker build -t ma_flask_app:v1 .
+
+# Explication :
+# -t : tag (nom:version)
+# .  : contexte de build (dossier courant)
+
+# Options utiles :
+docker build --no-cache -t ma_flask_app:v2 .
+# --no-cache : ignore le cache et reconstruit tout
+
+# Verifier que l'image a ete creee
+docker images | grep ma_flask_app
+\end{lstlisting}
+
+\subsection{Commande docker tag}
+\begin{lstlisting}[caption=Tagger une image]
+# Donner un nouveau tag a une image existante
+docker tag ma_flask_app:v1 mon_user/ma_flask_app:latest
+
+# Pour preparer le push vers Docker Hub
+docker tag ma_flask_app:v1 mon_user/ma_flask_app:v1
+
+# Explication : Utile pour versionner ou pousser vers un registre
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 9 : LANCEMENT DU CONTENEUR
+% ======================================================================
+\section{Lancement du conteneur a partir de l'image}
+
+\subsection{Lancement avec mapping de ports}
+\begin{lstlisting}[caption=Lancer le conteneur Flask]
+# Lancer le conteneur en mode detache
+docker run -d --name mon_app -p 5000:5000 ma_flask_app:v1
+
+# Verifier que le conteneur tourne
+docker ps
+
+# Tester l'application : http://localhost:5000
+
+# Voir les logs
+docker logs mon_app
+
+# Options supplementaires :
+# -d : mode detache (arriere-plan)
+# --name : donne un nom au conteneur
+# -p : mapping de ports (port_hote:port_conteneur)
+
+# Si le port 5000 est deja utilise :
+docker run -d --name mon_app -p 8080:5000 ma_flask_app:v1
+# Acces : http://localhost:8080
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 10 : TP PRATIQUE GUIDE
+% ======================================================================
+\section{TP Pratique guide}
+
+\begin{importantbox}{Enonce du TP}
+Vous allez creer une application web simple avec Python Flask, la conteneuriser avec Docker, et la deployer localement.
+\end{importantbox}
+
+\subsection{Etape 1 : Preparation de l'environnement}
+\begin{lstlisting}[caption=Creer le dossier du projet]
+mkdir ~/mon_tp_docker
+cd ~/mon_tp_docker
+\end{lstlisting}
+
+\subsection{Etape 2 : Creation de l'application}
+Creez un fichier \texttt{app.py} :
+\begin{lstlisting}[style=pythonstyle, caption=Application a creer]
+from flask import Flask
+import datetime
+import socket
+import sys
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def accueil():
+    now = datetime.datetime.now()
+    return f"""
+    <h1>TP Docker - Application Flask</h1>
+    <p>Date et heure actuelles : {now.strftime('%d/%m/%Y %H:%M:%S')}</p>
+    <p>Le conteneur fonctionne correctement !</p>
+    """
+
+@app.route('/info')
+def info():
+    return f"""
+    <h2>Informations du conteneur</h2>
+    <ul>
+        <li>Hostname : {socket.gethostname()}</li>
+        <li>Plateforme : {os.uname().sysname}</li>
+        <li>Python version : {sys.version}</li>
+    </ul>
+    """
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+\end{lstlisting}
+
+\subsection{Etape 3 : Fichier des dependances}
+Creez \texttt{requirements.txt} :
+\begin{lstlisting}
+Flask==2.3.2
+\end{lstlisting}
+
+\subsection{Etape 4 : Creation du Dockerfile}
+Creez \texttt{Dockerfile} :
+\begin{lstlisting}
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
+EXPOSE 5000
+CMD ["python", "app.py"]
+\end{lstlisting}
+
+\subsection{Etape 5 : Construction de l'image}
+\begin{lstlisting}
+docker build -t tp_flask_app .
+\end{lstlisting}
+
+\subsection{Etape 6 : Lancement du conteneur}
+\begin{lstlisting}
+docker run -d --name tp_conteneur -p 5000:5000 tp_flask_app
+\end{lstlisting}
+
+\subsection{Etape 7 : Verification}
+\begin{lstlisting}
+# Voir les conteneurs actifs
+docker ps
+
+# Voir les logs
+docker logs tp_conteneur
+
+# Tester dans le navigateur : http://localhost:5000
+# et http://localhost:5000/info
+\end{lstlisting}
+
+\subsection{Etape 8 : Arret et nettoyage}
+\begin{lstlisting}
+# Arreter le conteneur
+docker stop tp_conteneur
+
+# Supprimer le conteneur
+docker rm tp_conteneur
+
+# Optionnel : supprimer l'image
+docker rmi tp_flask_app
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 11 : EXERCICES SUPPLEMENTAIRES
+% ======================================================================
+\section{Exercices supplementaires}
+
+\subsection{Exercice 1 : Application Redis}
+\begin{importantbox}{Exercice 1}
+Creez un conteneur Redis et connectez-vous a son interface en ligne de commande.
+\end{importantbox}
+\textbf{Objectifs :}
+\begin{itemize}
+    \item Utiliser \texttt{docker pull} pour telecharger l'image Redis
+    \item Lancer un conteneur Redis en mode detache
+    \item Utiliser \texttt{docker exec} pour ouvrir un shell Redis
+\end{itemize}
+\begin{lstlisting}[caption=Correction]
+# Telecharger l'image Redis
+docker pull redis:alpine
+
+# Lancer Redis en mode detache
+docker run -d --name mon_redis -p 6379:6379 redis:alpine
+
+# Se connecter au conteneur et lancer redis-cli
+docker exec -it mon_redis redis-cli
+
+# Tester quelques commandes Redis
+# > set ma_cle "Bonjour"
+# > get ma_cle
+# > exit
+
+# Nettoyer
+docker stop mon_redis
+docker rm mon_redis
+\end{lstlisting}
+
+\subsection{Exercice 2 : Modification du Dockerfile}
+\begin{importantbox}{Exercice 2}
+Modifiez le Dockerfile de l'application Flask pour ajouter une variable d'environnement et changer le port par defaut.
+\end{importantbox}
+\textbf{Indices :}
+\begin{itemize}
+    \item Utilisez \texttt{ENV} pour definir une variable
+    \item Modifiez le port dans l'application
+\end{itemize}
+\begin{lstlisting}[caption=Correction]
+# Dockerfile modifie
+FROM python:3.9-slim
+
+# Ajout d'une variable d'environnement
+ENV APP_ENV=production
+ENV APP_PORT=8080
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
+
+EXPOSE 8080
+CMD ["python", "app.py"]
+
+# Construction et lancement
+docker build -t flask_enhanced .
+docker run -d -p 8080:8080 flask_enhanced
+\end{lstlisting}
+
+\subsection{Exercice 3 : Nettoyage complet}
+\begin{importantbox}{Exercice 3}
+Nettoyez votre systeme Docker : supprimez tous les conteneurs arretes et toutes les images non utilisees.
+\end{importantbox}
+\begin{lstlisting}[caption=Correction]
+# Supprimer tous les conteneurs arretes
+docker container prune -f
+
+# Supprimer toutes les images non utilisees
+docker image prune -a -f
+
+# Supprimer les volumes non utilises
+docker volume prune -f
+
+# Supprimer les reseaux non utilises
+docker network prune -f
+
+# Tout nettoyer d'un coup (attention !)
+docker system prune -a -f --volumes
+
+# Verifier qu'il ne reste rien
+docker ps -a
+docker images
+\end{lstlisting}
+
+% ======================================================================
+% SECTION 12 : CONCLUSION
+% ======================================================================
+\section{Conclusion}
+
+\subsection{Resume du TP}
+Au cours de ce TP, nous avons :
+\begin{itemize}
+    \item Compris les concepts fondamentaux de Docker et de la conteneurisation
+    \item Installe et configure Docker sur notre machine
+    \item Manipule des images et des conteneurs
+    \item Cree notre propre image avec un Dockerfile
+    \item Deploye une application Flask conteneurisee
+    \item Realise des exercices pratiques pour approfondir
+\end{itemize}
+
+\subsection{Avantages de la conteneurisation dans le DevOps}
+La conteneurisation avec Docker apporte des benefices considerables :
+\begin{itemize}
+    \item \textbf{Portabilite} : Une application conteneurisee tourne partout
+    \item \textbf{Isolation} : Les applications n'interferent pas entre elles
+    \item \textbf{Efficacite} : Utilisation optimale des ressources
+    \item \textbf{Reproductibilite} : Meme environnement partout
+    \item \textbf{CICD} : Integration facile dans les pipelines
+    \item \textbf{Mise a l'echelle} : Facilite l'orchestration (Kubernetes, Swarm)
+\end{itemize}
+
+\begin{importantbox}{Pour aller plus loin}
+Ce TP vous a donne les bases. Pour approfondir, explorez :
+\begin{itemize}
+    \item Docker Compose pour les applications multi-conteneurs
+    \item Les reseaux Docker
+    \item Les volumes pour la persistance des donnees
+    \item Kubernetes pour l'orchestration a grande echelle
+\end{itemize}
+\end{importantbox}
+
+\end{document}
