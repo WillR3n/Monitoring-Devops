@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bulletin Qualité TFJO — BICEC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange: #D96704;
+      --brown: #401202;
+      --orange-light: #F5E6D3;
+      --bg: #FAF7F4;
+      --gray: #6B6B6B;
+      --gray-light: #E8E2DC;
+      --text: #1a1a1a;
+      --white: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--brown);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 20px,
+        rgba(217,103,4,0.07) 20px, rgba(217,103,4,0.07) 40px
+      );
+    }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-box {
+      width: 52px; height: 52px;
+      background: var(--orange);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(217,103,4,0.4);
+    }
+
+    .header-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .header-text p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .date-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 9px 16px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .date-badge span {
+      display: block;
+      color: rgba(255,255,255,0.4);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .date-badge strong {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* MAIN */
+    .main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 40px 80px;
+    }
+
+    .intro {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-size: 13.5px;
+      color: var(--brown);
+      font-weight: 400;
+    }
+
+    /* SECTION */
+    .section {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      box-shadow: 0 1px 8px rgba(64,18,2,0.07);
+      border: 1px solid var(--gray-light);
+      animation: fadeUp 0.35s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section:nth-child(2) { animation-delay: 0.05s; }
+    .section:nth-child(3) { animation-delay: 0.10s; }
+    .section:nth-child(4) { animation-delay: 0.15s; }
+    .section:nth-child(5) { animation-delay: 0.20s; }
+    .section:nth-child(6) { animation-delay: 0.25s; }
+    .section:nth-child(7) { animation-delay: 0.30s; }
+
+    .section-header {
+      background: linear-gradient(135deg, var(--brown) 0%, #6b2404 100%);
+      padding: 12px 22px;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 14.5px;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .section-body { padding: 20px 22px; }
+
+    /* GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* FIELD */
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+
+    .field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .field input[type="text"],
+    .field input[type="time"],
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      appearance: none;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(217,103,4,0.1);
+      background: white;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.6;
+    }
+
+    /* SELECT */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--orange);
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    /* INCIDENT BLOCK */
+    .incident-block {
+      display: none;
+      margin-top: 14px;
+      padding: 16px;
+      background: #fff8f5;
+      border: 1.5px solid #f5c0a0;
+      border-radius: 9px;
+    }
+
+    .incident-block.visible { display: block; animation: fadeUp 0.3s ease; }
+    .incident-block .field { margin-bottom: 12px; }
+    .incident-block .field:last-child { margin-bottom: 0; }
+
+    /* AUTRES TRAITEMENTS */
+    .autres-wrap { position: relative; }
+
+    .autres-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .autres-input-row input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .autres-input-row input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(217,103,4,0.1);
+      background: white;
+    }
+
+    .btn-add {
+      padding: 10px 18px;
+      background: var(--orange-light);
+      border: 1.5px solid var(--orange);
+      border-radius: 8px;
+      color: var(--brown);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .btn-add:hover {
+      background: var(--orange);
+      color: white;
+    }
+
+    .autres-list-preview {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .autres-list-preview li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      background: var(--bg);
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .autres-list-preview li::before {
+      content: '•';
+      color: var(--orange);
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .btn-remove {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #c0392b;
+      cursor: pointer;
+      font-size: 13px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      padding: 2px 6px;
+    }
+
+    .btn-remove:hover { opacity: 1; }
+
+    /* HIDDEN INPUT CONTAINER */
+    #autres-hidden { display: none; }
+
+    /* SUBMIT */
+    .submit-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn-reset {
+      padding: 12px 26px;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 9px;
+      background: white;
+      color: var(--gray);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-reset:hover { border-color: var(--brown); color: var(--brown); }
+
+    .btn-submit {
+      padding: 12px 34px;
+      background: var(--orange);
+      border: none;
+      border-radius: 9px;
+      color: white;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(217,103,4,0.3);
+    }
+
+    .btn-submit:hover {
+      background: #bf5a03;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(217,103,4,0.4);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+
+    /* SUCCESS */
+    .success-msg {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #4caf50;
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-top: 18px;
+      text-align: center;
+      color: #2e7d32;
+      font-size: 14.5px;
+      font-weight: 500;
+    }
+
+    .success-msg.visible { display: block; animation: fadeUp 0.4s ease; }
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 20px; flex-wrap: wrap; }
+      .main { padding: 20px 16px 60px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .date-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-box">B</div>
+    <div class="header-text">
+      <h1>Bulletin Qualité TFJO</h1>
+      <p>Banque Internationale du Cameroun pour l'Épargne et le Crédit</p>
+    </div>
+    <div class="date-badge">
+      <span>Date du jour</span>
+      <strong id="today-date">—</strong>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="intro">
+    Remplissez les champs ci-dessous puis cliquez sur <strong>Soumettre</strong>. Le script de collecte automatique sera déclenché après la soumission.
+  </div>
+
+  <form id="bulletin-form" action="/cgi-bin/traitement.sh" method="POST">
+
+    <!-- SECTION 1 : TRAVAUX DU TFJO -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Travaux du TFJO</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>Contrôle disponibilité AMPLITUDE</label>
+          <input type="time" name="AMPLITUDE"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 : MONETIQUE -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Monétique</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>Disponibilité du résident PCA</label>
+          <input type="text" name="PCA" placeholder="ex : RAS"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 : SERVICES A VALEUR AJOUTE -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Services à valeur ajouté</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div class="field">
+            <label>Disponibilité STREAMSERVE</label>
+            <input type="text" name="STREAMSERVE" placeholder="ex : RAS"/>
+          </div>
+          <div class="field">
+            <label>Disponibilité SWIFT</label>
+            <input type="text" name="SWIFT" placeholder="ex : RAS"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 : DISPONIBILITE DU SI -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Disponibilité du SI</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div class="field">
+            <label>Taux disponibilité journée</label>
+            <input type="text" name="TAUX_JOUR" placeholder="ex : 100%"/>
+          </div>
+          <div class="field">
+            <label>Taux disponibilité du mois</label>
+            <input type="text" name="TAUX_MOIS" placeholder="ex : 100%"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 : INCIDENT DE PRODUCTION -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Incident de production</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>Y a-t-il eu un incident ?</label>
+          <div class="select-wrap">
+            <select name="HAS_INCIDENT" id="has-incident" onchange="toggleIncident(this.value)">
+              <option value="">— Sélectionner —</option>
+              <option value="NON">Non — Aucun incident</option>
+              <option value="OUI">Oui — Incident à déclarer</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="incident-block" id="incident-block">
+          <div class="field">
+            <label>Description de l'incident</label>
+            <textarea name="INCIDENT" placeholder="Décrivez l'incident survenu..."></textarea>
+          </div>
+          <div class="field">
+            <label>Action immédiate</label>
+            <textarea name="ACTION" placeholder="Actions entreprises pour résoudre l'incident..."></textarea>
+          </div>
+          <div class="field">
+            <label>Durée de l'incident</label>
+            <input type="text" name="DUREE_INCIDENT" placeholder="ex : 00H15"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 : AUTRES TRAITEMENTS -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Autres Traitements</h2>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>Ajouter un traitement</label>
+          <div class="autres-input-row">
+            <input type="text" id="autre-input" placeholder="ex : Extraction Hebdomadaire après TFJO"/>
+            <button type="button" class="btn-add" onclick="addAutre()">Ajouter</button>
+          </div>
+          <ul class="autres-list-preview" id="autres-preview"></ul>
+        </div>
+        <!-- Les valeurs seront injectées ici dynamiquement -->
+        <div id="autres-hidden"></div>
+      </div>
+    </div>
+
+    <!-- BOUTONS -->
+    <div class="submit-bar">
+      <button type="button" class="btn-reset" onclick="resetForm()">Réinitialiser</button>
+      <button type="submit" class="btn-submit">Soumettre le bulletin</button>
+    </div>
+
+  </form>
+
+  <div class="success-msg" id="success-msg">
+    Données soumises avec succès. Le script de collecte automatique a été déclenché. Le bulletin qualité est en cours de génération.
+  </div>
+
+</div>
+
+<script>
+  // Date du jour
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('fr-FR', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  // Afficher/masquer bloc incident
+  function toggleIncident(val) {
+    document.getElementById('incident-block').classList.toggle('visible', val === 'OUI');
+  }
+
+  // Gestion des autres traitements
+  let autresItems = [];
+
+  function addAutre() {
+    const input = document.getElementById('autre-input');
+    const val = input.value.trim();
+    if (!val) return;
+
+    autresItems.push(val);
+    input.value = '';
+    renderAutres();
+  }
+
+  // Permettre d'ajouter avec Entrée
+  document.getElementById('autre-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); addAutre(); }
+  });
+
+  function removeAutre(index) {
+    autresItems.splice(index, 1);
+    renderAutres();
+  }
+
+  function renderAutres() {
+    const preview = document.getElementById('autres-preview');
+    const hidden = document.getElementById('autres-hidden');
+
+    // Affichage liste
+    preview.innerHTML = autresItems.map((item, i) => `
+      <li>
+        ${item}
+        <button type="button" class="btn-remove" onclick="removeAutre(${i})">Supprimer</button>
+      </li>
+    `).join('');
+
+    // Inputs cachés pour envoi
+    hidden.innerHTML = autresItems.map((item, i) =>
+      `<input type="hidden" name="AUTRE_${i}" value="${item}"/>`
+    ).join('');
+  }
+
+  // Réinitialiser
+  function resetForm() {
+    document.getElementById('bulletin-form').reset();
+    autresItems = [];
+    renderAutres();
+    document.getElementById('incident-block').classList.remove('visible');
+    document.getElementById('success-msg').classList.remove('visible');
+  }
+
+  // Soumission
+  document.getElementById('bulletin-form').addEventListener('submit', function(e) {
+    // Retirer e.preventDefault() en production pour soumettre vers /cgi-bin/traitement.sh
+    e.preventDefault();
+    document.getElementById('success-msg').classList.add('visible');
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
